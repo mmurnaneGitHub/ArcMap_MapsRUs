@@ -1,0 +1,250 @@
+Imports ESRI.ArcGIS.Geodatabase
+Imports ESRI.ArcGIS.esriSystem
+Imports ESRI.ArcGIS.Carto
+Imports ESRI.ArcGIS.ArcMapUI
+Imports ESRI.ArcGIS.Catalog
+
+Public Class Form1
+
+    Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        'Form with a list box(ListBox1) containing layers to choose from
+
+        Dim A As String()
+
+        A = New String() {"Address Points", "AddressPoints.lyr", "Aerial Photos (1931)", "aerial1931.lyr", "Aerial Photos (1950)", "aerial1950.lyr", "Aerial Photos (1973)", "aerial1973.lyr", "Aerial Photos (1992)", "aerial92.lyr", "Aerial Photos (1996)", "aerial96.lyr", "Aerial Photos (1998)", "aerial1998.lyr", "Aerial Photos (2002)", "aerial2002.lyr", "Aerial Photos (2005)", "aerial2005.lyr", "Aerial Photos (PC - 2005)", "aerial2005PC.lyr", "Aerial Photos (2006)", "aerial2006.lyr", "Aerial Photos (2009)", "aerial2009.lyr", _
+            "Aerial Photos (2012)", "aerial2012.lyr", "Aerial Photos (2015)", "aerial2015.lyr", "Aerial Photos (2015 - pre 10.3.1)", "aerial2015_101.lyr", _
+            "Aerial Photos (ESRI Imagery)", "ESRI_Imagery.lyr", _
+            "Arterials", "arterials.lyr", _
+            "Assessor Files", "MDB_", _
+            "BIA", "BIA.lyr", _
+            "Bicycle Network", "BicycleNetwork.lyr", _
+            "Bing Maps", "BingMaps.lyr", "Buildable Lands (2005)", "BuildableLands2005.lyr", _
+            "Census Blocks (1990)", "censusblk90.lyr", "Census Block Groups (1990)", "censusbg90.lyr", "Census Tracts (1990)", "censustrt90.lyr", "Census Tract Boundaries (1990)", "censustbdy90.lyr", _
+            "Census 2000 - Tacoma City Blocks", "censusblk00city.lyr", "Census 2000 - Tacoma UGA Blocks", "censusblk00.lyr", "Census 2000 - Tacoma UGA Tracts", "censustrt00.lyr", "Census 2000 - Pierce County", "censuspc00.lyr", "Census 2000 - Washington State", "censuswa00.lyr", _
+            "Census 2010", "census2010.lyr", _
+            "City Boundary", "citybdy.lyr", "Community Map", "CommunityMap.lyr", "Contours (2002-2004)", "contours.lyr", "Contours (1990-2ft)", "contours2.lyr", "Contours (1990-10ft)", "contours10.lyr", "Councilmanic Districts", "councilmanic.lyr", _
+            "Downtown (Working Definition)", "DowntownTacoma.lyr", _
+            "Empowerment Zone", "empowerment.lyr", _
+            "Facilities (Capital)", "faccap.lyr", "Facilities (Community)", "faccom.lyr", "Facilities (Municipal)", "facmuni.lyr", "FAZ", "faz.lyr", "Fire Stations", "firestations.lyr", "Flood Zone", "FloodZone.lyr", _
+            "Geodata Dictionary (geodata)", "DBF_//geobase-win/pdsshare/pdsshr1/datadict|geodata.dbf", _
+            "Habitat Corridors", "HabitatCorridors.lyr", "Habitat Zones", "habitatzones.lyr", "Highways", "highways.lyr", "Hillshade", "Topography.lyr", "Historic Areas", "historic.lyr", _
+            "IFSA", "IFSA.lyr", _
+            "Land Use Designations", "LandUseDesignations.lyr", _
+            "Land Use Intensity", "intensity.lyr", "Light Rail", "lightrail.lyr", "Lots & Blocks", "LotsBlocks.lyr", _
+            "Map Basics", "mapbasics.lyr", "Manufacturing / Industrial Center", "mic.lyr", "McChord AFB", "McChordAFB.lyr", "Mixed Use Centers", "muc.lyr", _
+            "Neighborhood Areas", "neighareas.lyr", "Neighborhood Blocks", "neighblocks.lyr", "Neighborhood Business Districts", "nbd.lyr", "Neighborhood Council Districts", "ncd.lyr", _
+            "Parcels", "parcels.lyr", "Parking Downtown", "parking.lyr", "Parks (Metro)", "parks.lyr", _
+            "Pedestrian Street Classes", "PedestrianStreetClasses.lyr", _
+            "Pierce Transit", "PierceTransit.lyr", "Planimetrics (2005)", "Planimetrics2005.lyr", _
+            "Police Sectors", "PoliceSectors.lyr", "Police Sectors, Districts, Blocks", "PoliceSectorsDistrictsBlocks.lyr", _
+            "Puyallup Land Claims Settlement", "puyalluplc.lyr", "Puyallup Tribal Lands", "PuyallupTribalLands.lyr", _
+            "Steep Slopes", "steepslopes.lyr", "Streets (2005 Planimetrics)", "Streets2005.lyr", "Street Centerlines", "streetcl.lyr", "Street Centerlines (Pierce County)", "streetclpc.lyr", _
+            "Table Data Dictionary (table)", "DBF_//geobase-win/pdsshare/pdsshr1/datadict|table.dbf", "TAZ (1999)", "taz99.lyr", _
+            "Trails", "Trails.lyr", _
+            "Urban Growth Area", "uga.lyr", _
+            "Wetlands", "wetlands.lyr", _
+            "Zip Codes", "zipcodes.lyr", "Zoning", "zoning.lyr", "Zoning - Standard Colors", "zoningsc.lyr", "", ""}
+
+        'Populate the list box using an array as DataSource. 
+        Dim theLayers As New ArrayList()
+
+        'Loop through number of layers & create multidimensional array
+        For i = 0 To ((UBound(A) / 2) - 1)
+            'A(i * 2)       ' Layer Name (column 1)
+            'A((i * 2) + 1) ' Layer or INFO file (column 2)
+            theLayers.Add(New theLayer(A(i * 2), A((i * 2) + 1)))
+        Next
+
+        ListBox1.DataSource = theLayers
+
+        ' Set the long name as the property to be displayed and the short
+        ' name as the value to be returned when a row is selected.  Here
+        ' these are properties; if we were binding to a database table or
+        ' query these could be column names.
+        ListBox1.DisplayMember = "LongName"
+        ListBox1.ValueMember = "ShortName"
+
+        ' Ensure the form opens with no rows selected.
+        ListBox1.ClearSelected()
+    End Sub
+
+    Public Class theLayer
+        Private myShortName As String
+        Private myLongName As String
+
+        Public Sub New(ByVal strLongName As String, ByVal strShortName As String)
+            Me.myShortName = strShortName
+            Me.myLongName = strLongName
+        End Sub 'New
+
+        Public ReadOnly Property ShortName() As String
+            Get
+                Return myShortName
+            End Get
+        End Property
+
+        Public ReadOnly Property LongName() As String
+            Get
+                Return myLongName
+            End Get
+        End Property
+
+    End Class 'theLayer
+
+    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+
+        If ListBox1.SelectedItems.Count <> 0 Then
+            ' If so, loop through all selected items
+            Dim x As Integer
+            For x = 0 To ListBox1.SelectedItems.Count - 1
+                AddLayerFromFile(ListBox1.SelectedItems(x).ShortName.ToString)
+            Next x
+        End If
+
+        Me.Close()  'Close form
+
+    End Sub
+
+    Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
+        Me.Close()
+    End Sub
+
+    Private Sub AddLayerFromFile(ByVal layerPathFile As String)
+
+        'Get current document variables
+        Dim pDoc As IMxDocument
+        Dim pMap As IMap
+        pDoc = My.ArcMap.Document
+        pMap = pDoc.FocusMap
+        Dim tableCollection As ITableCollection = TryCast(pMap, ITableCollection)
+
+        If (Mid(layerPathFile, 1, 4)) = "DBF_" Then 'DBF TABLE
+            Dim theTable As String = layerPathFile.Replace("DBF_", "")
+            AddDBFTable(theTable, pDoc, tableCollection)
+
+        ElseIf (Mid(layerPathFile, 1, 4)) = "MDB_" Then 'ACCESS TABLE
+            Dim theTable As String = layerPathFile.Replace("DBF_", "")
+            AddMDB_Table(theTable, pDoc, tableCollection)
+
+        ElseIf (Mid(layerPathFile, 1, 7)) = "ORACLE_" Then 'ORACLE TABLE
+            'add the line:             "Assessor Files", "ORACLE_Assessor", _
+
+            Dim theTable As String = layerPathFile.Replace("ORACLE_", "")
+            If (theTable = "Assessor") Then
+                ' Create an array of assessor tables
+                Dim aTables() As String = {"PIERCE.AT_APPRAISALACCOUNT", "PIERCE.AT_IMPROVEMENT", "PIERCE.AT_IMPROVEMENTBUILTAS", "PIERCE.AT_IMPROVEMENTDETAIL", "PIERCE.AT_LANDATTRIBUTE", "PIERCE.AT_SALE", "PIERCE.AT_SEGMERGE", "PIERCE.AT_TAXACCOUNT", "PIERCE.AT_TAXDESCRIPTION", "PIERCE.AT_TAXPAYER", "PIERCE.AT_UPDATE"}
+
+                ' Loop over the array
+                For Each value As String In aTables
+                    AddOracleTable(value, pDoc, tableCollection)
+                Next
+
+            Else ' All other Oracle tables
+                AddOracleTable(theTable, pDoc, tableCollection)
+            End If
+
+        Else 'LAYER FILE
+            'Create a GxLayer.
+            Dim gxLayerCls As IGxLayer = New GxLayer
+            Dim gxFile As IGxFile = gxLayerCls 'Implicit Cast.
+
+            'Set the path for the layer file
+            gxFile.Path = "//geobase-win/pdsshare/pdsshr1/mapbases/layerfiles/" + layerPathFile
+
+            'Test for valid layer and add it to map.
+            If Not gxLayerCls.Layer Is Nothing Then
+                pMap.AddLayer(gxLayerCls.Layer)
+            End If
+
+        End If
+
+    End Sub
+    Public Sub AddDBFTable(ByVal tablePath As String, ByVal pDoc As IMxDocument, ByVal tableCollection As ITableCollection)
+
+        Dim pathName() As String
+        pathName = tablePath.Split("|")
+        Dim tablePathName As String = pathName(0)
+        Dim tableName As String = pathName(1)
+        Dim pTable As ITable = OpenTable(tablePathName, tableName)
+        AddMyTable(pDoc, tableCollection, pTable)
+
+    End Sub
+    Public Sub AddOracleTable(ByVal tableName As String, ByVal pDoc As IMxDocument, ByVal tableCollection As ITableCollection)
+
+        ' Set up the SDE connection properties
+        ' Assessor tables are added with a special user name
+        Dim connectionProperties As IPropertySet = New PropertySet
+        With connectionProperties
+            .SetProperty("server", "dbgis01")
+            .SetProperty("instance", "5151")
+            .SetProperty("database", "oraGIS")
+            .SetProperty("user", "sdeview")
+            .SetProperty("password", "sdeview")
+            .SetProperty("version", "sde.DEFAULT")
+        End With
+
+        ' Get the SDE Workspace
+        Dim obj As System.Object = Activator.CreateInstance(Type.GetTypeFromProgID("esriDataSourcesGDB.SdeWorkspaceFactory"))
+        Dim workspaceFactory As IWorkspaceFactory2 = obj
+        Dim SDEWorkspace As IWorkspace = workspaceFactory.Open(connectionProperties, 0)
+
+        ' Get the Address Table from the Feature Workspace
+        Dim featureWorkspace As IFeatureWorkspace = SDEWorkspace
+        Dim pTable As ITable = featureWorkspace.OpenTable(tableName)
+
+        AddMyTable(pDoc, tableCollection, pTable)
+
+    End Sub
+    Public Sub AddMDB_Table(ByVal tableName As String, ByVal pDoc As IMxDocument, ByVal tableCollection As ITableCollection)
+        'for now just the assessor data
+
+        Dim pWorkSpace As IFeatureWorkspace
+        Dim pWSFact As IWorkspaceFactory
+        Dim pTable As ITable
+
+        pWSFact = New ESRI.ArcGIS.DataSourcesGDB.AccessWorkspaceFactory
+        pWorkSpace = pWSFact.OpenFromFile("\\geobase-win\pdsshare\pdsshr1\mapbases\layerfiles\AssessorTables.mdb", 0)
+
+        ' Create an array of assessor tables
+        Dim aTables() As String = {"Appraisal_account", "Improvement", "Improvement_builtas", "Improvement_detail", "Land_attribute", "Sale", "Seg_merge", "Tax_account", "Tax_description", "Taxpayer"}
+
+        ' Loop over the array
+        For Each value As String In aTables
+            'Make this a new function for other access tables
+            pTable = pWorkSpace.OpenTable(value)
+            tableCollection.AddTable(pTable)
+        Next
+
+        ' Refresh table of contents
+        pDoc.UpdateContents()
+
+    End Sub
+
+    Public Function OpenTable(ByVal pathName As String, ByVal tableName As String) As ITable
+
+        ' Create the workspace name object.
+        Dim workspaceName As IWorkspaceName = New WorkspaceName() 'creates 12 warnings - fix by changing  Embed Interop Types property of References
+        workspaceName.PathName = pathName
+        workspaceName.WorkspaceFactoryProgID = "esriDataSourcesFile.shapefileworkspacefactory"
+
+        ' Create the table name object.
+        'Dim dataSetName As IDatasetName = New TableNameClass()
+        Dim dataSetName As IDatasetName = New TableName()
+        dataSetName.Name = tableName
+        dataSetName.WorkspaceName = workspaceName
+
+        ' Open the table.
+        Dim Name As IName = TryCast(dataSetName, IName)
+        Dim table As ITable = TryCast(Name.Open(), ITable)
+        Return table
+
+    End Function
+    Public Sub AddMyTable(ByVal pDoc As IMxDocument, ByVal tableCollection As ITableCollection, ByVal table As ITable)
+        If (table Is Nothing) Then
+            Return
+        Else
+            tableCollection.AddTable(table)
+            pDoc.UpdateContents()
+        End If
+    End Sub
+End Class

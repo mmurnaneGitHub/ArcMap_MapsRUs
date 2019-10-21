@@ -1,0 +1,26 @@
+Add-Ins 
+
+VS 2013 Project Location:
+H = \\tmb00901\mmurnane
+H:\Visual Studio 2013\Projects
+H:\Visual Studio 2013\Projects\AddDataAddin\AddDataAddin\bin\Debug
+\\tmb00901\mmurnane\Visual Studio 2013\Projects
+
+OLD:
+H:\Visual Studio 2010\Projects\AddDataAddInNEW2016 (copy old folder)
+H:\Visual Studio 2010\Projects\AddDataAddInNEW2016\AddDataAddIn\AddDataAddIn (navigate to new folder/AddDataAddIn.vbproj in VS)
+
+Primary code located in Form1.vb, double-click to open code, build
+
+Add-In: 
+H:\Visual Studio 2013\Projects\AddDataAddin\AddDataAddin\bin\Debug\AddDataAddin.esriAddIn
+
+Make backup copy of existing Add-In to
+\\geobase-win\pdsshare\pdsshr1\mapbases\AddIns-OLD\previous\
+
+Copy Add-In to 
+Shared Location:
+\\geobase-win\pdsshare\pdsshr1\mapbases\AddIns\
+
+
+***Cannot have add-ins with the same name in each area (will only show the version in My Location in Add-In Manager)****************

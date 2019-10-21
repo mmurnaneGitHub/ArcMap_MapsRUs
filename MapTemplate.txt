@@ -1,0 +1,34 @@
+
+Network map template directory: \\geobase-win\pdsshare\pdsshr1\mapbases\MapTemplates
+
+Copied the ArcGIS installed templates to network from here: C:\arcgis\Desktop10.2\MapTemplates
+(need to update as newer versions of ArcGIS are installed)
+
+Save Time with Map Templates:
+http://www.esri.com/news/arcwatch/1110/tip.html
+
+Run ArcMapAdvancedSettings.exe (located at C:\arcgis\Desktop10.2\Utilities or C:\Program Files (x86)\ArcGIS\Desktop10.2\Utilities) to change the default map Templates path.
+Utility Instructions: C:\arcgis\Desktop10.2\Utilities\ArcGIS Desktop Advanced Settings Registry Keys.pdf 
+
+To create multiple System template locations, you can modify the following registry key, separating folders with a semicolon (;).
+HKEY_LOCAL_MACHINE\SOFTWARE\ESRI\Desktop10.0\ArcMap\Settings\TemplateDir
+C:\Program Files (x86)\ArcGIS\Desktop10.0\Bin\Templates;E:\More System Templates
+
+Naming convention: Size Orientation (extra description).mxd
+
+simple letter
+\\Geobase-win\CED\GADS\R2014\R403\PDF
+
+simple tabloid
+\\Geobase-win\CED\GADS\R2014\R212\pdf
+
+simple D
+\\Geobase-win\CED\GADS\R2014\R128\pdf
+
+Arch D Landscape
+\\Geobase-win\CED\GADS\R2013\R386\PDF
+
+Arch D Portrait(Simple)
+\\Geobase-win\CED\GADS\R2013\R377\PDF
+
+Plot Date: <dyn type="date" format="short"/>    File Name: <dyn type="document" property="path"/>    Created By: <dyn type="user"/> 

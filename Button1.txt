@@ -1,0 +1,22 @@
+Public Class Button1
+  Inherits ESRI.ArcGIS.Desktop.AddIns.Button
+
+  Public Sub New()
+
+  End Sub
+
+  Protected Overrides Sub OnClick()
+    '
+        '  TODO: check to see if form already open
+        '
+        Dim frm As New Form1
+        'show form as modal window
+        frm.ShowDialog()
+
+    My.ArcMap.Application.CurrentTool = Nothing
+  End Sub
+
+  Protected Overrides Sub OnUpdate()
+    Enabled = My.ArcMap.Application IsNot Nothing
+  End Sub
+End Class
